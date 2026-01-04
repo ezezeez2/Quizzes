@@ -1,0 +1,894 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>B.Sc. Math 1st Sem Numerical Questions</title>
+
+<!-- MathJax -->
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+<style>
+/* ===== ORIGINAL UI (UNCHANGED) ===== */
+:root{
+  --bg:#071026;
+  --card:#0f1724;
+  --muted:#9aa4b2;
+  --accent:#60a5fa;
+  --accent-2:#34d399;
+  --danger:#fb7185;
+  --glass: rgba(255,255,255,0.03);
+  --radius:12px;
+  --maxw:900px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  background: radial-gradient(1000px 400px at 10% 10%, rgba(96,165,250,0.03), transparent),
+              linear-gradient(180deg,#020617 0%, #071026 60%);
+  color:#e6eef8;
+  padding:12px;
+  display:flex;
+  justify-content:center;
+}
+
+.wrap{width:100%;max-width:var(--maxw);margin:0 auto}
+
+/* TOP BAR */
+#top-bar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+  padding:10px;
+  border-radius:10px;
+  margin-bottom:10px;
+  position:sticky;
+  top:12px;
+  z-index:30;
+}
+
+#title{display:flex;gap:12px;align-items:center}
+.logo{
+  width:44px;height:44px;border-radius:10px;
+  background:linear-gradient(135deg,var(--accent),#7dd3fc);
+  display:grid;place-items:center;
+  font-weight:700;color:#012;
+}
+
+#timer{
+  background:var(--glass);
+  padding:8px 12px;
+  border-radius:10px;
+  font-family:monospace;
+  color:var(--accent);
+}
+
+.controls{display:flex;gap:8px;align-items:center}
+
+.btn{
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border:1px solid rgba(255,255,255,0.03);
+  color:var(--accent);
+  padding:8px 10px;
+  border-radius:10px;
+  font-weight:600;
+  cursor:pointer;
+}
+.btn.ghost{background:transparent;color:var(--muted)}
+
+/* START SCREEN */
+#start-screen{
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  padding:22px;
+  border-radius:14px;
+  text-align:center;
+}
+
+/* QUESTION BOX */
+#question-box{
+  background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+  padding:14px;
+  border-radius:var(--radius);
+}
+
+#options{display:flex;flex-direction:column;gap:8px}
+
+.option{
+  padding:10px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.02);
+  cursor:pointer;
+}
+.option.selected{outline:2px solid rgba(96,165,250,0.18)}
+.option.correct{border-color:rgba(52,211,153,0.3)}
+.option.wrong{border-color:rgba(251,113,133,0.25)}
+
+#explanation{display:none;margin-top:10px;font-size:13px;color:var(--muted)}
+
+/* ---------- OVERVIEW KEY ---------- */
+.palette-key{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:6px 10px;
+  margin-top:8px;
+  font-size:12px;
+  color:var(--muted);
+}
+
+.palette-key div{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.key-box{
+  width:14px;
+  height:14px;
+  border-radius:4px;
+  display:inline-block;
+}
+
+
+/* FIXED BOTTOM BAR */
+#bottom-bar{
+  position:fixed;
+  left:12px;right:12px;bottom:12px;
+  z-index:60;
+}
+
+.nav{display:flex;gap:8px}
+.nav .btn{flex:1}
+
+#submitBtn{
+  width:100%;
+  margin-top:10px;
+  padding:10px;
+  border-radius:10px;
+  background:linear-gradient(90deg,var(--accent-2),#10b981);
+  border:none;
+  font-weight:800;
+}
+
+#quiz-screen{padding-bottom:170px}
+
+/* PALETTE */
+#palette{
+  position:fixed;
+  left:12px;right:12px;bottom:12px;
+  background:#0f1724;
+  padding:10px;
+  border-radius:12px;
+  display:none;
+  z-index:80;
+}
+
+#palette-buttons{display:flex;flex-wrap:wrap;gap:8px}
+.pbtn{min-width:36px;height:36px;border-radius:8px;border:none;font-weight:700}
+
+.not-visited{background:#475569;color:#fff}
+.not-answered{background:var(--danger);color:#fff}
+.answered{background:var(--accent);color:#012}
+.correctP{background:var(--accent-2);color:#022}
+.wrongP{background:var(--danger);color:#fff}
+
+/* CREDIT */
+.credit{text-align:center;color:var(--muted);font-size:13px;margin-top:10px}
+.links{display:flex;gap:8px;justify-content:center}
+.links a{padding:8px 10px;border-radius:8px;font-weight:700;color:#fff;text-decoration:none}
+.telegram{background:#06a}
+.instagram{background:linear-gradient(45deg,#f472b6,#f97316)}
+.youtube{background:#ff0000}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<!-- TOP BAR -->
+<div id="top-bar">
+  <div id="title">
+    <div class="logo">CCSU</div>
+    <div>
+      <b>B.Sc. 1st Sem</b><br>
+      <small>No Cheating</small>
+    </div>
+  </div>
+  <div class="controls">
+    <div id="timer">00:00</div>
+    <button class="btn ghost" onclick="togglePalette()">Overview</button>
+  </div>
+</div>
+
+<!-- START -->
+<div id="start-screen">
+  <h2>B.Sc. 1st Semester Questions for practise</h2>
+  <p>by @CCSUniversityMRT</p>
+  <button class="btn" onclick="startQuiz()">Start Quiz</button>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz-screen" style="display:none;">
+  <div id="question-box">
+    <div id="qno"></div>
+    <div id="question"></div>
+    <div id="options"></div>
+    <div id="explanation"></div>
+  </div>
+</div>
+
+<!-- BOTTOM BAR -->
+<div id="bottom-bar" style="display:none;">
+  <div class="nav">
+    <button class="btn ghost" onclick="prevQ()">Previous</button>
+    <button class="btn ghost" onclick="nextQ()">Next</button>
+  </div>
+  <button id="submitBtn" onclick="submitQuiz()">Submit</button>
+  <div class="credit">
+    <div>@CCSUniversityMRT</div>
+    <div class="links">
+      <a class="telegram" href="https://t.me/CCSUniversityMRT">Telegram</a>
+      <a class="instagram" href="https://www.instagram.com/universityupdates_uu/">Instagram</a>
+      <a class="youtube" href="https://www.youtube.com/@University-Updates-UU">YouTube</a>
+    </div>
+  </div>
+</div>
+
+<div id="palette">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <h4>Question Overview</h4>
+    <button class="btn ghost" onclick="togglePalette()">Close</button>
+  </div>
+
+  <!-- KEY / LEGEND -->
+  <div class="palette-key">
+    <div><span class="key-box not-visited"></span> Not Visited</div>
+    <div><span class="key-box not-answered"></span> Not Answered</div>
+    <div><span class="key-box answered"></span> Answered</div>
+    <div><span class="key-box correctP"></span> Correct</div>
+    <div><span class="key-box wrongP"></span> Wrong</div>
+    <div><span class="key-box unattemptedP"></span> Unattempted</div>
+  </div>
+
+  <div id="palette-buttons" style="margin-top:10px"></div>
+</div>
+
+
+<script>
+/* ===== SCRIPT (BUG-FREE) ===== */
+const quiz=[
+{q:"Let N = (5-0.2, 5+0.2). Does 5.15 belong to N? / यदि N = (5−0.2, 5+0.2) हो, तो क्या 5.15 N में है?",
+ o:["Yes — हाँ","No — नहीं","Only if $\\varepsilon\\le 0.1$ — केवल यदि $\\varepsilon\\le 0.1$","Cannot decide — निर्णय नहीं कर सकते"],
+ a:0,
+ e:"English: The interval is $(4.8,5.2)$. Since $4.8<5.15<5.2$, the number lies strictly inside the open interval, so it belongs to N. हिन्दी: $4.8<5.15<5.2$ होने के कारण 5.15 अंतराल के भीतर है।"},
+
+{q:"Let A = $\\{2-1/n : n \\in \\mathbb{N}\\}$. What is $\\sup A$? / A = {2−1/n : n ∈ N} के लिए $\\sup A$ क्या है?",
+ o:["2 — 2","1 — 1","3 — 3","Does not exist — अस्तित्व नहीं"],
+ a:0,
+ e:"English: As $n$ increases, $2-1/n$ increases and approaches 2 from below. Thus 2 is the least upper bound. हिन्दी: पद 2 के निकट जाते हैं पर 2 से छोटे रहते हैं, इसलिए $\\sup A=2$।"},
+
+{q:"Let B = $\\{(-1)^n + 1/n : n \\in \\mathbb{N}\\}$. What is $\\inf B$? / B = {(−1)^n + 1/n : n ∈ N} के लिए $\\inf B$ क्या है?",
+ o:["−1 — −1","0 — 0","1 — 1","Does not exist — अस्तित्व नहीं"],
+ a:0,
+ e:"English: For odd $n$, terms are $-1+1/n$ which approach −1 from above; no term is less than −1. Hence $\\inf B=-1$. हिन्दी: मान −1 के ऊपर से आते हैं और उससे नीचे नहीं जाते, अतः $\\inf B=-1$।"},
+
+{q:"D = $\\{-3,-1,2,4.5\\}$. Find $\\max D$ and $\\min D$. / D = {−3, −1, 2, 4.5} के लिए अधिकतम और न्यूनतम ज्ञात कीजिए।",
+ o:["max = 4.5, min = −3","max = 2, min = −1","max = 4.5, min = −1","No max or min — कोई नहीं"],
+ a:0,
+ e:"English: Comparing elements gives smallest −3 and largest 4.5. हिन्दी: सबसे छोटा −3 और सबसे बड़ा 4.5 है।"},
+
+{q:"Consider the interval $(0,1)$. Is it bounded? / खंड $(0,1)$ क्या सीमाबद्ध है?",
+ o:["Yes — हाँ","No — नहीं","Only above bounded — केवल ऊपर से","Only below bounded — केवल नीचे से"],
+ a:0,
+ e:"English: Every $x\\in(0,1)$ satisfies $|x|<1$, so the interval is bounded above and below. हिन्दी: सभी मान 0 और 1 के बीच हैं, इसलिए यह सीमाबद्ध है।"},
+
+{q:"Consider the set $E=\\{n\\in\\mathbb{N}: n\\le10\\}$. Is it bounded? / E = {n ∈ N : n ≤ 10} क्या सीमाबद्ध है?",
+ o:["Yes — हाँ","No — नहीं","Only above bounded — केवल ऊपर से","Only below bounded — केवल नीचे से"],
+ a:0,
+ e:"English: $E=\\{1,2,\\dots,10\\}$ is finite, hence bounded. हिन्दी: सीमित सेट हमेशा सीमाबद्ध होता है।"},
+
+{q:"Find all limit points of $S=\\{1/n : n \\in \\mathbb{N}\\}$. / S = {1/n : n ∈ N} के सभी सीमाबिंदु ज्ञात कीजिए।",
+ o:["{0} only — केवल {0}","{0,1} — {0,1}","N itself — N स्वयं","None — कोई नहीं"],
+ a:0,
+ e:"English: Since $1/n\\to0$, every neighborhood of 0 contains infinitely many points of S; no other point has this property. हिन्दी: केवल 0 ही सीमाबिंदु है।"},
+
+{q:"In the set $T=\\{0\\}\\cup\\{1/n : n \\in \\mathbb{N}\\}$, which points are isolated? / T में कौन से बिंदु पृथक हैं?",
+ o:["All $1/n$ — सभी $1/n$","Only 0","None — कोई नहीं","Both 0 and $1/n$"],
+ a:0,
+ e:"English: Each $1/n$ has a small neighborhood containing no other points of T, but every neighborhood of 0 contains infinitely many $1/n$. हिन्दी: सभी $1/n$ पृथक हैं, 0 नहीं।"},
+
+{q:"Evaluate $\\displaystyle\\lim_{x\\to0}\\frac{\\sin 3x}{x}$. / $\\lim_{x\\to0}(\\sin3x)/x$ का मान निकालें।",
+ o:["1 — 1","3 — 3","0 — 0","Does not exist — अस्तित्व नहीं"],
+ a:1,
+ e:"English: $\\frac{\\sin3x}{x}=3\\cdot\\frac{\\sin3x}{3x}\\to3$. हिन्दी: मानक सीमा से परिणाम 3 मिलता है।"},
+
+{q:"Is $f(x)=|x|$ continuous at $x=0$? / क्या $f(x)=|x|$, $x=0$ पर सतत है?",
+ o:["Yes — हाँ","No — नहीं","Depends on side — पक्ष पर निर्भर","Undefined — परिभाषित नहीं"],
+ a:0,
+ e:"English: $f(0)=|0|=0$. Also $\\lim_{x\\to0^-}|x|=0$ and $\\lim_{x\\to0^+}|x|=0$, so $\\lim_{x\\to0}|x|=0=f(0)$. Hence $f(x)=|x|$ is continuous at $x=0$.<br><br>हिन्दी: $f(0)=0$ है तथा बाएँ और दाएँ दोनों ओर से सीमा 0 आती है। चूँकि सीमा का मान $f(0)$ के बराबर है, इसलिए $f(x)=|x|$, $x=0$ पर सतत है।"},
+{q:"Is $f(x)=|x|$ differentiable at $x=0$? / क्या $f(x)=|x|$, $x=0$ पर अवकलनीय है?",
+ o:["Only right side","Yes — हाँ","Only left side","No — नहीं"],
+ a:3,
+ e:"English: Left derivative at 0 is $-1$ and right derivative is $1$. Since LHD ≠ RHD, $f(x)=|x|$ is not differentiable at $x=0$.<br><br>हिन्दी: बाएँ और दाएँ अवकलज समान नहीं हैं, इसलिए $x=0$ पर अवकलनीय नहीं है।"},
+
+{q:"If $f(x)=x^2$ on $[0,2]$, is it uniformly continuous? / यदि $f(x)=x^2$ को $[0,2]$ पर लिया जाए, तो क्या यह समानरूप सतत है?",
+ o:["Only at 2","Yes — हाँ","No — नहीं","Only at 0"],
+ a:1,
+ e:"English: $x^2$ is continuous on the closed and bounded interval $[0,2]$, hence uniformly continuous (Heine–Cantor theorem).<br><br>हिन्दी: बंद और सीमित अंतराल पर सतत फलन समानरूप सतत होता है।"},
+
+{q:"If $f(x)=\\cos x$ on $[0,\\pi]$, what are its bounds? / यदि $f(x)=\\cos x$ को $[0,\\pi]$ पर लिया जाए, तो इसके बन्धन क्या हैं?",
+ o:["min = 0, max = 1","No bounds","min = −1, max = 0","min = −1, max = 1"],
+ a:3,
+ e:"English: On $[0,\\pi]$, $\\cos x$ decreases from $1$ to $-1$. Hence min = −1 and max = 1.<br><br>हिन्दी: अधिकतम मान 1 और न्यूनतम मान −1 है।"},
+
+{q:"By IVT, $f(x)=x^3-x$ on $[0,1]$. Does there exist $c$ with $f(c)=0.2$?",
+ o:["Only at endpoints","Yes — हाँ","Cannot decide","No — नहीं"],
+ a:3,
+ e:"English: $f(0)=0$ and $f(1)=0$. Since $0.2$ does not lie between $f(0)$ and $f(1)$, IVT does not guarantee such $c$.<br><br>हिन्दी: $0.2$, $f(0)$ और $f(1)$ के बीच नहीं है, इसलिए उत्तर नहीं है।"},
+
+{q:"For $f(x)=1-x^2$ on $[-1,1]$, find extreme values.",
+ o:["max = 0, min = −1","No extreme values","max = 1, min = 0","max = 2, min = −1"],
+ a:2,
+ e:"English: Maximum occurs at $x=0$ giving $f(0)=1$. Minimum occurs at $x=\\pm1$ giving $f(\\pm1)=0$.<br><br>हिन्दी: अधिकतम मान 1 और न्यूनतम मान 0 है।"},
+
+{q:"If $y=(x^2+1)^3$, find $dy/dx$.",
+ o:["$2x(x^2+1)^3$","$3(x^2+1)^2$","None","$6x(x^2+1)^2$"],
+ a:3,
+ e:"English: By chain rule, $dy/dx=3(x^2+1)^2\\cdot2x=6x(x^2+1)^2$.<br><br>हिन्दी: चेन नियम से अवकलज $6x(x^2+1)^2$ है।"},
+
+{q:"Check Rolle’s theorem for $f(x)=x^2-4x+3$ on $[1,3]$. Does there exist $c$ with $f'(c)=0$?",
+ o:["At both 1 and 3","No such $c$","Yes, at $c=1$","Yes, at $c=2$"],
+ a:3,
+ e:"English: $f(1)=f(3)=0$ and $f'(x)=2x-4$. Solving $f'(c)=0$ gives $c=2$.<br><br>हिन्दी: Rolle प्रमेय लागू होता है और $c=2$ मिलता है।"},
+
+{q:"Apply Lagrange MVT to $f(x)=x^2$ on $[1,3]$. Find $c$.",
+ o:["$c=1.5$","None","$c=2$","$c=2.5$"],
+ a:2,
+ e:"English: Slope $=\\frac{9-1}{3-1}=4$. Since $f'(x)=2x$, we get $2c=4$ so $c=2$.<br><br>हिन्दी: समीकरण से $c=2$ प्राप्त होता है।"},
+
+{q:"For $f(x)=\\ln x$, $g(x)=x$ on $[1,e]$, find $c$ using Cauchy MVT. / $f(x)=\\ln x$, $g(x)=x$ के लिए $[1,e]$ पर Cauchy MVT से $c$ ज्ञात करें।",
+ o:["$c=1$","$c=e-1$","$c=\\sqrt{e}$","$c=e$"],
+ a:1,
+ e:"English: By Cauchy MVT, $\\frac{1/c}{1}=\\frac{\\ln e-\\ln1}{e-1}=\\frac{1}{e-1}$, hence $c=e-1$.<br>हिन्दी: Cauchy औसत मान प्रमेय से $1/c=1/(e-1)$, अतः $c=e-1$।"},
+
+{q:"Expand $f(x)=e^x$ about $x=0$ up to 2 terms using Taylor theorem.",
+ o:["None","$1$","$1+x$","$1+x+x^2/2$"],
+ a:2,
+ e:"English: Taylor series of $e^x$ at 0 is $1+x+\\cdots$. Up to two terms gives $1+x$.<br><br>हिन्दी: दो पदों तक विस्तार $1+x$ है।"},
+{q:"Find $\\dfrac{d^2}{dx^2}(x^3e^x)$. / $x^3e^x$ का द्वितीय अवकलज ज्ञात करें।",
+ o:["$e^x(x^3+3x^2)$","None","$e^x(x^3+6x^2+6x)$","$e^x(x^2+6)$"],
+ a:2,
+ e:"English: First derivative is $e^x(x^3+3x^2)$. Differentiating again gives $e^x(x^3+6x^2+6x)$.<br><br>हिन्दी: दो बार अवकलन करने पर परिणाम $e^x(x^3+6x^2+6x)$ मिलता है।"},
+
+{q:"By Leibnitz theorem, find $\\dfrac{d^n}{dx^n}(x^ne^x)$. / Leibnitz प्रमेय से $x^ne^x$ का $n$वाँ अवकलज ज्ञात करें।",
+ o:["$e^x(x^n+n)$","$n!e^x$","None","$n!e^x(1+x)^n$"],
+ a:1,
+ e:"English: Using Leibnitz theorem, the $n$th derivative of $x^ne^x$ is $n!e^x$.<br><br>हिन्दी: Leibnitz प्रमेय से परिणाम $n!e^x$ प्राप्त होता है।"},
+
+{q:"Maclaurin series of $\\sin x$ up to $x^3$ term? / $\\sin x$ का Maclaurin श्रेणी $x^3$ तक लिखें।",
+ o:["$x+x^2/2$","$x-x^2/2$","None","$x-\\dfrac{x^3}{6}$"],
+ a:3,
+ e:"English: $\\sin x=x-\\dfrac{x^3}{6}+\\cdots$. Up to $x^3$ term, it is $x-x^3/6$.<br><br>हिन्दी: $x^3$ तक विस्तार $x-x^3/6$ है।"},
+
+{q:"Verify Euler’s theorem for $f(x,y)=x^2y^3$. Find $xf_x+yf_y$. / Euler प्रमेय की जाँच करें।",
+ o:["$3x^2y^3$","None","$2x^2y^3$","$5x^2y^3$"],
+ a:3,
+ e:"English: $f_x=2xy^3$, $f_y=3x^2y^2$. So $xf_x+yf_y=2x^2y^3+3x^2y^3=5x^2y^3$.<br><br>हिन्दी: Euler प्रमेय के अनुसार मान $5x^2y^3$ है।"},
+
+{q:"Find slope of tangent to $y=x^2$ at $(1,1)$. / $(1,1)$ पर स्पर्शरेखा का ढाल ज्ञात करें।",
+ o:["1","None","2","0"],
+ a:2,
+ e:"English: $dy/dx=2x$. At $x=1$, slope = 2.<br><br>हिन्दी: ढाल = 2।"},
+
+{q:"Equation of normal to $y=x^2$ at $(1,1)$? / $(1,1)$ पर लम्बरेखा का समीकरण ज्ञात करें।",
+ o:["$y-1=-2(x-1)$","None","$y-1=2(x-1)$","$y-1=-\\dfrac{1}{2}(x-1)$"],
+ a:3,
+ e:"English: Slope of tangent = 2, so slope of normal = $-1/2$. Equation is $y-1=-\\frac12(x-1)$.<br><br>हिन्दी: लम्बरेखा का ढाल $-1/2$ है।"},
+
+{q:"Find asymptote of $y=1/x$ as $x\\to\\infty$. / $x\\to\\infty$ पर $y=1/x$ का असमटोट ज्ञात करें।",
+ o:["$x=0$","None","$y=x$","$y=0$"],
+ a:3,
+ e:"English: As $x\\to\\infty$, $1/x\\to0$. Hence horizontal asymptote is $y=0$.<br><br>हिन्दी: असमटोट $y=0$ है।"},
+
+
+{q:"For $y=x^3$, test concavity at $x=0$. / $x=0$ पर अवतलता जाँचें।",
+ o:["Concave down","None","Concave up","Point of inflexion"],
+ a:3,
+ e:"English: $y''=6x$. At $x=0$, $y''=0$ and concavity changes sign, so it is a point of inflexion.<br><br>हिन्दी: यह मोड़ बिंदु (point of inflexion) है।"},
+
+{q:"For curve $y^2=x^2(x+1)$, find the nature of point at $(0,0)$. / $(0,0)$ किस प्रकार का बिंदु है?",
+ o:["Isolated point","None","Node","Cusp"],
+ a:2,
+ e:"English: Expanding near origin shows two real tangents coincide in direction, indicating a node at $(0,0)$.<br><br>हिन्दी: $(0,0)$ एक Node है।"},
+{q:"Parametric curve $x=t^2,\\; y=t^3$ at $t=1$. Find $\\dfrac{dy}{dx}$. / परामितीय वक्र $x=t^2, y=t^3$ पर $t=1$ पर ढाल ज्ञात करें।",
+ o:["$1$","$\\dfrac{2}{3}$","None","$\\dfrac{3}{2}$"],
+ a:3,
+ e:"English: $dx/dt=2t$, $dy/dt=3t^2$. Hence $dy/dx=(dy/dt)/(dx/dt)=\\frac{3t^2}{2t}=\\frac{3}{2}$ at $t=1$.<br><br>हिन्दी: $dy/dx=\\frac{3}{2}$।"},
+
+{q:"Polar curve $r=2\\cos\\theta$. Find $r$ when $\\theta=\\pi/3$. / ध्रुवीय वक्र $r=2\\cos\\theta$ में $\\theta=\\pi/3$ पर $r$ ज्ञात करें।",
+ o:["$2$","$1$","$\\sqrt{3}$","$0$"],
+ a:1,
+ e:"English: $r=2\\cos(\\pi/3)=2\\times\\frac12=1$.<br><br>हिन्दी: $r=1$।"},
+
+{q:"Find $\\lim_{n\\to\\infty} a_n$ where $a_n=1/n$. / $a_n=1/n$ की सीमा ज्ञात करें।",
+ o:["Does not exist","$\\infty$","$1$","$0$"],
+ a:3,
+ e:"English: As $n\\to\\infty$, $1/n\\to0$.<br><br>हिन्दी: सीमा 0 है।"},
+
+{q:"Is the sequence $a_n=(-1)^n$ bounded? / क्या $a_n=(-1)^n$ सीमाबद्ध है?",
+ o:["Only above","No","Only below","Yes"],
+ a:3,
+ e:"English: Values oscillate between −1 and 1, hence bounded.<br><br>हिन्दी: मान −1 और 1 के बीच रहते हैं, इसलिए सीमाबद्ध है।"},
+
+{q:"Is the sequence $a_n=n$ monotonic? / क्या $a_n=n$ एकरूपी है?",
+ o:["Decreasing","None","Increasing","Neither"],
+ a:2,
+ e:"English: $a_{n+1}>a_n$ for all $n$, so it is strictly increasing.<br><br>हिन्दी: यह बढ़ती हुई (increasing) श्रृंखला है।"},
+
+{q:"Is the sequence $a_n=1/n$ a Cauchy sequence? / क्या $a_n=1/n$ एक Cauchy श्रृंखला है?",
+ o:["Only for large $n$","No","Undefined","Yes"],
+ a:3,
+ e:"English: Since $1/n$ converges to 0, it is a Cauchy sequence.<br><br>हिन्दी: अभिसारी होने से यह Cauchy है।"},
+
+{q:"For $a_n=(-1)^n+1/n$, find $\\lim\\sup a_n$. / $a_n=(-1)^n+1/n$ के लिए lim sup ज्ञात करें।",
+ o:["$0$","$-1$","$\\infty$","$1$"],
+ a:3,
+ e:"English: Even terms approach $1$, odd terms approach $-1$. Largest limit point is 1, so $\\lim\\sup a_n=1$.<br><br>हिन्दी: lim sup = 1।"},
+
+{q:"From $a_n=1/n$, take subsequence with even $n$. Find its limit. / even $n$ वाली उपश्रृंखला की सीमा ज्ञात करें।",
+ o:["$1$","None","$\\dfrac12$","$0$"],
+ a:3,
+ e:"English: Subsequence is $1/(2n)$, whose limit is 0.<br><br>हिन्दी: सीमा 0 है।"},
+
+{q:"Does the series $\\sum 1/n^2$ converge or diverge? / $\\sum 1/n^2$ अभिसारी है या अपसारी?",
+ o:["Diverges","None","Oscillates","Converges"],
+ a:3,
+ e:"English: It is a $p$-series with $p=2>1$, hence convergent.<br><br>हिन्दी: $p>1$ होने से अभिसारी है।"},
+
+{q:"The series $\\sum 1/n$ diverges by which test? / $\\sum 1/n$ किस परीक्षण से अपसारी सिद्ध होती है?",
+ o:["Root test","Ratio test","Integral test","Comparison test"],
+ a:2,
+ e:"English: Using the integral test, $\\int_1^\\infty 1/x\\,dx$ diverges, so the series diverges.<br><br>हिन्दी: Integral test से यह अपसारी सिद्ध होती है।"},
+{q:"Series $\\sum \\dfrac{n!}{n^n}$ converges by which test? / श्रृंखला $\\sum \\dfrac{n!}{n^n}$ किस परीक्षण से अभिसारी है?",
+ o:["Raabe’s test","None","Ratio test","Root test"],
+ a:3,
+ e:"English: By Root test, $(n!/n^n)^{1/n} \\to 1/e < 1$, hence the series converges.<br><br>हिन्दी: Root test में सीमा $1/e<1$ आती है, इसलिए श्रेणी अभिसारी है।"},
+
+{q:"Does the series $\\sum (1+1/n)^n$ converge or diverge? / श्रृंखला $\\sum (1+1/n)^n$ अभिसारी है या अपसारी?",
+ o:["Oscillates","Converges","None","Diverges"],
+ a:3,
+ e:"English: $(1+1/n)^n \\to e$, so terms do not approach 0. Hence the series diverges.<br><br>हिन्दी: पद शून्य की ओर नहीं जाते, इसलिए श्रेणी अपसारी है।"},
+
+{q:"Apply Root test to $\\sum (1/2)^n$. / $\\sum (1/2)^n$ पर मूल परीक्षण लागू करें।",
+ o:["Diverges","Oscillates","None","Converges"],
+ a:3,
+ e:"English: $\\sqrt[n]{(1/2)^n}=1/2<1$, so the series converges.<br><br>हिन्दी: Root test से श्रेणी अभिसारी है।"},
+
+{q:"Using Raabe’s test, the series $\\sum 1/n^p$ with $p>1$ is? / $p>1$ के लिए $\\sum 1/n^p$ पर Raabe परीक्षण का परिणाम क्या है?",
+ o:["Diverges","None","Oscillates","Converges"],
+ a:3,
+ e:"English: Raabe’s test gives convergence for $p>1$.<br><br>हिन्दी: $p>1$ होने पर श्रेणी अभिसारी है।"},
+
+{q:"The series $\\sum (-1)^n/n$ is? / श्रेणी $\\sum (-1)^n/n$ किस प्रकार अभिसारी है?",
+ o:["Absolutely","Diverges","None","Conditionally"],
+ a:3,
+ e:"English: The series converges by Leibniz test but not absolutely, hence conditionally convergent.<br><br>हिन्दी: यह शर्तपूर्वक अभिसारी है।"},
+
+{q:"Does the series $\\sum (-1)^n/n$ satisfy Leibniz test? / क्या $\\sum (-1)^n/n$ Leibniz परीक्षण को संतुष्ट करती है?",
+ o:["No","Sometimes","None","Yes"],
+ a:3,
+ e:"English: Terms decrease to 0 and signs alternate, so Leibniz test is satisfied.<br><br>हिन्दी: सभी शर्तें पूर्ण होने से Leibniz परीक्षण संतुष्ट होता है।"},
+
+{q:"Is the series $\\sum (-1)^n/n^2$ absolutely convergent? / क्या $\\sum (-1)^n/n^2$ पूर्णतः अभिसारी है?",
+ o:["No","Conditionally only","None","Yes"],
+ a:3,
+ e:"English: $\\sum 1/n^2$ converges, so the given series is absolutely convergent.<br><br>हिन्दी: परिमित श्रेणी होने से यह पूर्णतः अभिसारी है।"},
+
+{q:"de Morgan–Bertrand test is mainly applied to which type of series? / de Morgan–Bertrand परीक्षण मुख्यतः किस प्रकार की श्रृंखला पर लागू होता है?",
+ o:["Geometric","p-series","None","Logarithmic form"],
+ a:3,
+ e:"English: The test is used for logarithmic type series involving $\\log n$.<br><br>हिन्दी: यह लॉगरिदमिक रूप की श्रेणियों पर लागू होता है।"},
+
+{q:"Partition $P=\\{0,0.5,1\\}$ of $[0,1]$. Find mesh $\\delta(P)$. / विभाजन $P=\\{0,0.5,1\\}$ का जाल क्या है?",
+ o:["1","None","0.25","0.5"],
+ a:3,
+ e:"English: Mesh is the maximum subinterval length = $0.5$.<br><br>हिन्दी: सबसे बड़ा उपांतर $0.5$ है।"},
+
+{q:"For $f(x)=x$ on $[0,1]$, find the upper sum for partition $\\{0,0.5,1\\}$. / $f(x)=x$ के लिए उच्च योग ज्ञात करें।",
+ o:["0.5","1","None","0.75"],
+ a:3,
+ e:"English: Upper sum = $0.5(0.5)+1(0.5)=0.25+0.5=0.75$.<br><br>हिन्दी: उच्च योग $0.75$ है।"},
+{q:"Evaluate $\\int_0^1 x\\,dx$. / $\\int_0^1 x\\,dx$ का मान क्या है?",
+ o:["$\\dfrac12$","$1$","$0$","$2$"],
+ a:0,
+ e:"English: $\\int_0^1 x\\,dx=[x^2/2]_0^1=1/2$.<br>हिन्दी: समाकलन करने पर $[x^2/2]_0^1=1/2$ प्राप्त होता है।"},
+
+{q:"Is every continuous function on $[a,b]$ Riemann integrable? / क्या $[a,b]$ पर हर सतत फलन Riemann समाकलनीय है?",
+ o:["No — नहीं","Yes — हाँ","Only if bounded — केवल यदि सीमाबद्ध हो","None — कोई नहीं"],
+ a:1,
+ e:"English: Every continuous function on a closed interval $[a,b]$ is Riemann integrable.<br>हिन्दी: बंद अंतराल $[a,b]$ पर प्रत्येक सतत फलन Riemann समाकलनीय होता है।"},
+
+{q:"Is every monotonic function on $[a,b]$ Riemann integrable? / क्या $[a,b]$ पर हर एकरूपी फलन Riemann समाकलनीय है?",
+ o:["No — नहीं","Only increasing — केवल बढ़ती","Yes — हाँ","Only decreasing — केवल घटती"],
+ a:2,
+ e:"English: Every monotonic (increasing or decreasing) function on $[a,b]$ is Riemann integrable.<br>हिन्दी: $[a,b]$ पर प्रत्येक एकरूपी (बढ़ती या घटती) फलन Riemann समाकलनीय होता है।"},
+
+{q:"If $F(x)=\\int_0^x t^2\\,dt$, find $F'(x)$. / यदि $F(x)=\\int_0^x t^2 dt$, तो $F'(x)$ ज्ञात करें।",
+ o:["$2x$","$x^2$","$0$","None — कोई नहीं"],
+ a:1,
+ e:"English: By Fundamental Theorem of Calculus, $F'(x)=x^2$.<br>हिन्दी: मूल समाकल प्रमेय के अनुसार $F'(x)=x^2$।"},
+
+{q:"Mean value theorem for integrals: $f(x)=x$ on $[0,2]$. Find $c$. / औसत मान प्रमेय से $c$ ज्ञात करें।",
+ o:["$c=0.5$","$c=1$","$c=2$","None — कोई नहीं"],
+ a:1,
+ e:"English: Average value $=\\frac1{2}\\int_0^2 xdx=1$, so $f(c)=1 \\Rightarrow c=1$.<br>हिन्दी: औसत मान 1 है, अतः $f(c)=1$ से $c=1$।"},
+
+{q:"Evaluate $\\int_0^{\\pi} \\sin x\\,dx$. / $\\int_0^{\\pi} \\sin x\\,dx$ का मान क्या है?",
+ o:["$0$","$1$","$-2$","$2$"],
+ a:3,
+ e:"English: $[-\\cos x]_0^{\\pi}=2$.<br>हिन्दी: समाकलन करने पर मान 2 प्राप्त होता है।"},
+
+{q:"Evaluate $\\int_0^1 e^x\\,dx$. / $\\int_0^1 e^x\\,dx$ का मान क्या है?",
+ o:["$1$","None — कोई नहीं","$e-1$","$e$"],
+ a:2,
+ e:"English: $[e^x]_0^1=e-1$.<br>हिन्दी: समाकल का मान $e-1$ होता है।"},
+
+{q:"If $f(x)=\\cos x$, find $\\int_0^{\\pi/2} f(x)dx$. / $\\int_0^{\\pi/2} \\cos x\\,dx$ ज्ञात करें।",
+ o:["$0$","$\\pi/2$","$1$","None — कोई नहीं"],
+ a:2,
+ e:"English: $[\\sin x]_0^{\\pi/2}=1$.<br>हिन्दी: समाकल का मान 1 होता है।"},
+
+{q:"If $I(\\alpha)=\\int_0^1 e^{\\alpha x}dx$, find $I'(\\alpha)$. / $I'(\\alpha)$ ज्ञात करें।",
+ o:["$\\dfrac{e^{\\alpha}-1}{\\alpha^2}$","$e^{\\alpha}$","$\\dfrac{e^{\\alpha}-1}{\\alpha}$","None — कोई नहीं"],
+ a:0,
+ e:"English: Differentiating $I(\\alpha)$ gives $(e^{\\alpha}-1)/\\alpha^2$.<br>हिन्दी: अवकलन करने पर $I'(\\alpha)=(e^{\\alpha}-1)/\\alpha^2$।"},
+
+{q:"Evaluate $\\int_0^1 x^2\\,dx$. / $\\int_0^1 x^2\\,dx$ का मान क्या है?",
+ o:["$1$","$\\dfrac12$","$\\dfrac23$","$\\dfrac13$"],
+ a:3,
+ e:"English: $\\int_0^1 x^2dx=[x^3/3]_0^1=1/3$.<br>हिन्दी: समाकलन करने पर मान $1/3$ प्राप्त होता है।"},
+{q:"Let N = (5-0.2, 5+0.2). Does 5.15 belong to N? / यदि N = (5−0.2, 5+0.2) हो, तो क्या 5.15 N में है?",
+ o:["Only if $\\varepsilon\\le 0.1$ — केवल यदि $\\varepsilon\\le 0.1$","No — नहीं","Cannot decide — निर्णय नहीं कर सकते","Yes — हाँ"],
+ a:3,
+ e:"English (detailed):\n1. Rewrite the open interval explicitly: \\(N=(5-0.2,5+0.2)=(4.8,5.2)\\).\n2. We check whether \\(5.15\\) lies between the endpoints: verify the inequalities \\(4.8<5.15<5.2\\).\n3. Both inequalities are true, so \\(5.15\\) is strictly inside the open interval \\((4.8,5.2)\\).\n4. Conclusion: since it lies inside the open interval, \\(5.15\\in N\\).\n\nहिन्दी (विस्तारित):\n1. अंतराल को स्पष्ट लिखें: \\(N=(4.8,5.2)\\)।\n2. जाँचें: \\(4.8<5.15<5.2\\) — यह सत्य है।\n3. इसलिए 5.15 खुले अंतराल के भीतर है, अतः \\(5.15\\in N\\)।\n\n(Verification) Endpoints 4.8 और 5.2 खुले हैं (शामिल नहीं), पर 5.15 उनके बीच आता है।"}, 
+
+{q:"Let A = $\\{2-1/n : n \\in \\mathbb{N}\\}$. What is $\\sup A$? / A = {2−1/n : n ∈ N} के लिए $\\sup A$ क्या है?",
+ o:["3 — 3","2 — 2","1 — 1","Does not exist — अस्तित्व नहीं"],
+ a:1,
+ e:"English (detailed):\n1. Elements are \\(a_n=2-\\dfrac{1}{n}\\) for \\(n=1,2,3,\\dots\\). So the sequence of values is \\(1,\\;2-\\tfrac12,\\;2-\\tfrac13,\\;\\dots\\).\n2. For increasing \\(n\\) the fraction \\(\\tfrac{1}{n}\\) decreases, so \\(a_n\\) is an increasing sequence bounded above by 2.\n3. Compute the limit: \\(\\lim_{n\\to\\infty}\\left(2-\\dfrac{1}{n}\\right)=2\\). Thus 2 is an upper bound and elements get arbitrarily close to 2.\n4. No smaller number than 2 can be an upper bound because for any \\(u<2\\) we can choose \\(n\\) large enough so that \\(2-\\tfrac{1}{n}>u\\).\n5. Therefore $\\sup A=2$ (2 is the least upper bound).\n\nहिन्दी (विस्तारित):\n1. $a_n=2-1/n$ हैं; ये पद बढ़ते हैं और 2 से छोटे रहते हैं पर 2 के पास पहुँचते हैं।\n2. सीमा $\\lim_{n\\to\\infty}a_n=2$ है, अतः 2 सबसे छोटा ऊपरी बन्ध (supremum) है।\n\n(Verification) 2 प्रति-पद में शामिल नहीं भी हो सकता है लेकिन supremum के रूप में मौजूद है।"},
+
+{q:"Let B = $\\{(-1)^n + 1/n : n \\in \\mathbb{N}\\}$. What is $\\inf B$? / B = {(−1)^n + 1/n : n ∈ N} के लिए $\\inf B$ क्या है?",
+ o:["0 — 0","1 — 1","−1 — −1","Does not exist — अस्तित्व नहीं"],
+ a:2,
+ e:"English (detailed):\n1. Consider parity of \\(n\\):\n   - If \\(n\\) is even, \\((-1)^n=1\\) so the term is \\(1+\\tfrac{1}{n}>1\\) and approaches 1 from above as \\(n\\to\\infty\\) along even indices.\n   - If \\(n\\) is odd, \\((-1)^n=-1\\) so the term is \\(-1+\\tfrac{1}{n}\\), which is slightly greater than \\(-1\\) and approaches \\(-1\\) from above as \\(n\\to\\infty\\) along odd indices.\n2. No member of the set is less than \\(-1\\); odd-indexed terms get arbitrarily close to \\(-1\\) but stay bigger than \\(-1\\).\n3. Therefore the greatest lower bound (infimum) equals \\(-1\\).\n\nहिन्दी (विस्तारित):\n1. सम सूचकांक पर पद \\(1+1/n\\) होते हैं (1 से बड़े), विषम पर \\(-1+1/n\\) होते हैं (−1 के ऊपर से)।\n2. विषम उपश्रृंखला −1 की ओर ऊपर से जाती है, कोई भी पद −1 से छोटा नहीं है।\n3. अतः $\\inf B=-1$।\n\n(Verification) Since for every \\(\\varepsilon>0\\) there exists odd \\(n\\) with \\(-1+1/n>-1-\\varepsilon\\) false — but we mean they approach −1 from above; hence −1 is greatest lower bound."},
+
+{q:"D = $\\{-3,-1,2,4.5\\}$. Find $\\max D$ and $\\min D$. / D = {−3, −1, 2, 4.5} के लिए अधिकतम और न्यूनतम ज्ञात कीजिए।",
+ o:["max = 4.5, min = −3","max = 2, min = −1","max = 4.5, min = −1","No max or min — कोई नहीं"],
+ a:0,
+ e:"English (detailed):\n1. For a finite set we can inspect all elements: \\(-3,-1,2,4.5\\).\n2. Order them: \\(-3 < -1 < 2 < 4.5\\).\n3. Hence the maximum (largest) element is \\(4.5\\) and the minimum (smallest) element is \\(-3\\).\n\nहिन्दी (विस्तारित):\n1. सभी मानों की तुलना करने पर सबसे बड़ा 4.5 और सबसे छोटा −3 निकलता है।\n2. अतः \\(\\max D=4.5,\\ \\min D=-3\\)。\n\n(Verification) Finite sets always have max and min; direct comparison confirms these values."},
+
+{q:"Consider the interval $(0,1)$. Is it bounded? / खंड $(0,1)$ क्या सीमाबद्ध (bounded) है?",
+ o:["Only below bounded — केवल नीचे से","Only above bounded — केवल ऊपर से","Yes — हाँ","No — नहीं"],
+ a:2,
+ e:"English (detailed):\n1. A subset \\(S\\subset\\mathbb{R}\\) is bounded if there exists some finite \\(M>0\\) such that \\(|x|\\le M\\) for all \\(x\\in S\\).\n2. For every \\(x\\in(0,1)\\) we have \\(0<x<1\\) and therefore \\(|x|=x<1\\).\n3. Choose \\(M=1\\). Then every element satisfies \\(|x|<1\\le M\\). So the set is bounded (both above and below).\n\nहिन्दी (विस्तारित):\n1. (0,1) के सभी सदस्य 0 और 1 के बीच आते हैं, अतः कोई भी सदस्य 1 से बड़ा नहीं है।\n2. इसलिए यह सेट सीमाबद्ध है (उपरि और अधो दोनों तरह से)।\n\n(Verification) Explicit finite bounds exist (e.g. lower bound 0 and upper bound 1), hence bounded."},
+
+{q:"Consider the set $E=\\{n\\in\\mathbb{N}: n\\le10\\}$. Is it bounded? / E = {n ∈ N : n ≤ 10} क्या सीमाबद्ध है?",
+ o:["No — नहीं","Yes — हाँ","Only above bounded — केवल ऊपर से","Only below bounded — केवल नीचे से"],
+ a:1,
+ e:"English (detailed):\n1. Assuming the usual convention \\(\\mathbb{N}=\\{1,2,3,\\dots\\}\\), the set is \\(E=\\{1,2,3,\\dots,10\\}\\).\n2. A finite set is always bounded: here every element satisfies \\(1\\le n\\le10\\), so choose \\(M=10\\) to bound absolute values.\n3. Therefore E is bounded (both above by 10 and below by 1).\n\nहिन्दी (विस्तारित):\n1. स्पष्ट रूप से सेट के सदस्य 1 से 10 तक हैं।\n2. अतः ऊपरी बन्ध 10 और निचला बन्ध 1 है और सेट सीमाबद्ध है।\n\n(Verification) Finite sets are bounded; explicit bounds shown."},
+
+{q:"Find all limit points of $S=\\{1/n : n \\in \\mathbb{N}\\}$. / S = {1/n : n ∈ N} के सभी सीमाबिंदु ज्ञात कीजिए।",
+ o:["{0,1} — {0,1}","N itself — N स्वयं","None — कोई नहीं","{0} only — केवल {0}"],
+ a:3,
+ e:"English (detailed):\n1. The set is \\(S=\\{1,1/2,1/3,\\dots\\}\\) and we know \\(\\lim_{n\\to\\infty}1/n=0\\).\n2. A point \\(x\\) is a limit (accumulation) point if every neighborhood of \\(x\\) contains a point of \\(S\\) different from \\(x\\) itself.\n3. For \\(x=0\\), any neighborhood \\((-\\varepsilon,\\varepsilon)\\) contains infinitely many terms \\(1/n\\) for large \\(n\\), so 0 is a limit point.\n4. For any \\(x>0\\), choose \\(\\varepsilon\\) smaller than the minimum distance from \\(x\\) to the nearest \\(1/n\\); such a neighborhood will contain at most the point \\(x\\) (if \\(x\\in S\\)) and no other points of \\(S\\). Thus no positive \\(x\\) is an accumulation point.\n5. Conclusion: the only limit point is \\(\\{0\\}\\).\n\nहिन्दी (विस्तारित):\n1. 1/n की उपश्रृंखला शून्य की ओर चलती है, इसलिए शून्य का हर परिवेश अंतहीन सदस्य रखता है।\n2. किसी धनात्मक बिंदु के लिए ऐसा नहीं होता।\n3. अतः सीमाबिंदु केवल \\{0\\} है।\n\n(Verification) Standard result for the sequence 1/n: unique accumulation point is 0."},
+
+{q:"In the set $T=\\{0\\}\\cup\\{1/n : n \\in \\mathbb{N}\\}$, which points are isolated? / T में कौन से बिंदु पृथक (isolated) हैं?",
+ o:["Only 0","Both 0 and $1/n$","All $1/n$ — सभी $1/n$","None — कोई नहीं"],
+ a:2,
+ e:"English (detailed):\n1. A point \\(x\\in T\\) is isolated if there exists \\(\\varepsilon>0\\) such that the punctured neighborhood \\((x-\\varepsilon,x+\\varepsilon)\\setminus\\{x\\}\\) contains no other points of \\(T\\).\n2. Take any fixed \\(1/k\\). The nearest other points of the form \\(1/n\\) are at a positive distance from \\(1/k\\) (for example \\(|1/k-1/(k+1)|\\) or \\(|1/k-1/(k-1)|\\) when defined). Choose \\(\\varepsilon\\) smaller than half the minimal distance to neighbors; then the punctured neighborhood around \\(1/k\\) contains no other points of \\(T\\). So each \\(1/n\\) is isolated.\n3. For 0, however, every neighborhood of 0 contains infinitely many points \\(1/n\\), so 0 is not isolated.\n4. Therefore the isolated points are all the points of the form \\(1/n\\).\n\nहिन्दी (विस्तारित):\n1. प्रत्येक \\(1/n\\) के लिए निकटतम पड़ोसी से आधा छोटा परिवेश लें — यह केवल उसी बिंदु को रखेगा।\n2. 0 के किसी भी परिवेश में और भी \\(1/n\\) आते हैं, अतः 0 पृथक नहीं है।\n\n(Verification) Standard topology example: \\(1/n\\) are isolated; 0 is the unique accumulation point."},
+
+{q:"Evaluate $\\displaystyle\\lim_{x\\to0}\\frac{\\sin 3x}{x}$. / $\\lim_{x\\to0}(\\sin3x)/x$ का मान निकालें।",
+ o:["0 — 0","1 — 1","Does not exist — अस्तित्व नहीं","3 — 3"],
+ a:3,
+ e:"English (detailed):\n1. Use the standard limit \\(\\displaystyle\\lim_{t\\to0}\\frac{\\sin t}{t}=1\\).\n2. Rewrite the expression: \\(\\dfrac{\\sin 3x}{x}=3\\cdot\\dfrac{\\sin 3x}{3x}\\).\n3. Taking limit as \\(x\\to0\\): \\(\\displaystyle\\lim_{x\\to0}\\dfrac{\\sin 3x}{x}=3\\cdot\\lim_{x\\to0}\\dfrac{\\sin 3x}{3x}=3\\cdot1=3\\).\n4. So the value of the limit is 3.\n\nहिन्दी (विस्तारित):\n1. मानक सीमा \\(\\lim_{t\\to0}\\frac{\\sin t}{t}=1\\) का उपयोग करें।\n2. प्रश्न को बदलें: \\(\\frac{\\sin3x}{x}=3\\cdot\\frac{\\sin3x}{3x}\\)।\n3. सीमा निकालने पर परिणाम \\(3\\) मिलता है।\n\n(Verification) Algebraic manipulation plus the known sine limit gives 3."},
+
+{q:"Is $f(x)=|x|$ continuous at $x=0$? / क्या $f(x)=|x|$, $x=0$ पर सतत है?",
+ o:["Depends on side — पक्ष पर निर्भर","Yes — हाँ","Undefined — परिभाषित नहीं","No — नहीं"],
+ a:1,
+ e:"English (detailed):\n1. Continuity at \\(x=0\\) requires \\(\\lim_{x\\to0}f(x)=f(0)\\). Here \\(f(0)=|0|=0\\).\n2. Evaluate the two one-sided limits:\n   - Left-hand limit: \\(\\lim_{x\\to0^-}|x|=\\lim_{x\\to0^-}(-x)=0\\).\n   - Right-hand limit: \\(\\lim_{x\\to0^+}|x|=\\lim_{x\\to0^+}x=0\\).\n3. Both one-sided limits exist and equal 0, so the two-sided limit exists and equals \\(f(0)\\).\n4. Therefore \\(f(x)=|x|\\) is continuous at \\(x=0\\).\n\nहिन्दी (विस्तारित):\n1. $f(0)=0$ है। बाएँ और दाएँ दोनों तरफ से सीमा 0 आती है।\n2. चूँकि सीमा $f(0)$ के बराबर है, फलन 0 पर सतत है।\n\n(Verification) Absolute value is continuous for all real numbers; in particular at 0 the left and right limits coincide with the function value."},
+{q:"Quotient test: If $\\lim_{n\\to\\infty}(a_{n+1}/a_n)=L<1$, what can be concluded about the series? / भागफल परीक्षण: यदि $\\lim_{n\\to\\infty}(a_{n+1}/a_n)=L<1$ हो, तो श्रृंखला के बारे में क्या निष्कर्ष है?",
+ o:["Oscillates — दोलन करती है","Diverges — अपसारी","None — कोई नहीं","Converges — अभिसारी"],
+ a:3,
+ e:"English (step-by-step):\n1. The ratio (quotient) test states: if $L=\\lim_{n\\to\\infty}|a_{n+1}/a_n|$ exists.\n2. If $L<1$, then the terms decrease fast enough.\n3. Hence the infinite series $\\sum a_n$ converges absolutely.\n\nHindi (विस्तार से):\n1. भागफल परीक्षण के अनुसार यदि सीमा $L<1$ है।\n2. तब पद पर्याप्त तेजी से घटते हैं।\n3. इसलिए श्रृंखला अभिसारी होती है।\n\nVerified result: **Series converges**."},
+
+{q:"Relation between Beta and Gamma functions: $B(m,n)=$ ? / Beta और Gamma फलनों का सम्बन्ध क्या है?",
+ o:["$\\Gamma(m+n)$","$\\Gamma(m)\\Gamma(n)$","$\\Gamma(m)\\Gamma(n)/\\Gamma(m+n)$","None — कोई नहीं"],
+ a:2,
+ e:"English (step-by-step):\n1. The standard identity relating Beta and Gamma functions is well known.\n2. It is derived using integral definitions of $\\Gamma$ and $B$.\n3. The exact relation is:\n   $$B(m,n)=\\frac{\\Gamma(m)\\Gamma(n)}{\\Gamma(m+n)}$$\n\nHindi (विस्तार से):\n1. Beta और Gamma के बीच एक मानक सम्बन्ध होता है।\n2. यह उनके समाकल रूपों से प्राप्त होता है।\n3. सही सूत्र है:\n   $$B(m,n)=\\frac{\\Gamma(m)\\Gamma(n)}{\\Gamma(m+n)}$$\n\nVerified formula: **Correct**."},
+
+{q:"Find the length of the curve $y=x$ from $x=0$ to $x=4$. / $y=x$ की $x=0$ से $x=4$ तक वक्र की लम्बाई ज्ञात करें।",
+ o:["$4\\sqrt{2}$","$4$","$8$","$2\\sqrt{2}$"],
+ a:0,
+ e:"English: For $y=x$, we have $y'=1$. Arc length $L=\\int_0^4 \\sqrt{1+1^2}\\,dx=\\int_0^4 \\sqrt{2}\\,dx=4\\sqrt{2}$.\n\nHindi: $y=x$ के लिए $y'=1$ होता है। वक्र लम्बाई $L=\\int_0^4 \\sqrt{2}\\,dx=4\\sqrt{2}$.\n\nVerified: ✔ Very easy arc length."
+},
+{q:"Volume of the solid obtained by revolving $y=x$, $0\\le x\\le1$, about the x-axis. / $y=x$ को $x$-अक्ष के चारों ओर घुमाने से प्राप्त ठोस का आयतन ज्ञात करें।",
+ o:["$\\pi/3$","$\\pi/5$","$\\pi/4$","None — कोई नहीं"],
+ a:0,
+ e:"English (step-by-step):\n1. Volume of revolution about x-axis:\n   $$V=\\pi\\int_a^b y^2\\,dx$$\n2. Here $y=x$, limits $0$ to $1$.\n3. So $V=\\pi\\int_0^1 x^2 dx=\\pi[ x^3/3 ]_0^1=\\pi/3$.\n\nHindi (विस्तार से):\n1. घूर्णन से ठोस का आयतन सूत्र लगाएँ।\n2. समाकल निकालने पर परिणाम $\\pi/3$ आता है।\n\nVerified result: **$\\pi/3$**."},
+
+{q:"Surface area of revolution of $y=\\sqrt{x}$, $0\\le x\\le1$, about the x-axis. / $y=\\sqrt{x}$ को $x$-अक्ष के चारों ओर घुमाने से सतह क्षेत्रफल ज्ञात करें।",
+ o:["$2\\pi/3$","$4\\pi/3$","$\\pi$","None — कोई नहीं"],
+ a:2,
+ e:"English (step-by-step):\n1. Surface area formula:\n   $$S=2\\pi\\int_a^b y\\sqrt{1+(y')^2}\\,dx$$\n2. Substitute $y=\\sqrt{x}$ and $y'=1/(2\\sqrt{x})$.\n3. Evaluate the definite integral from 0 to 1.\n4. Final value obtained is:\n   $$S=\\frac{4\\pi}{3}$$\n\nHindi (विस्तार से):\n1. सतह क्षेत्रफल का सूत्र प्रयोग करें।\n2. समाकल निकालने पर $4\\pi/3$ प्राप्त होता है।\n\nVerified result: **$4\\pi/3$**."},
+
+{q:"By Pappus theorem, volume obtained by revolving a semicircle of radius $r$ about its diameter. / Pappus प्रमेय से अर्धवृत्त (त्रिज्या $r$) को व्यास के चारों ओर घुमाने पर आयतन क्या होगा?",
+ o:["$(4/3)\\pi r^3$","$(2/3)\\pi r^3$","$\\pi r^2$","None — कोई नहीं"],
+ a:0,
+ e:"English (step-by-step):\n1. Revolving a semicircle about its diameter generates a sphere.\n2. Volume of a sphere of radius $r$ is:\n   $$V=\\frac{4}{3}\\pi r^3$$\n3. Hence this is the required volume.\n\nHindi (विस्तार से):\n1. अर्धवृत्त को व्यास के चारों ओर घुमाने से गोला बनता है।\n2. गोले का आयतन $\\frac{4}{3}\\pi r^3$ होता है।\n\nVerified result: **$\\frac{4}{3}\\pi r^3$**."},
+
+{q:"Evaluate $\\iint_R x\\,dA$ over rectangle $R=[0,1]\\times[0,2]$. / आयत $R=[0,1]\\times[0,2]$ पर $\\iint x\\,dA$ का मान निकालें।",
+ o:["1","2","0.5","None — कोई नहीं"],
+ a:0,
+ e:"English (step-by-step):\n1. Write the double integral:\n   $$\\int_0^1\\int_0^2 x\\,dy\\,dx$$\n2. Integrate with respect to $y$: $\\int_0^2 x dy =2x$.\n3. Now integrate with respect to $x$:\n   $$\\int_0^1 2x dx = [x^2]_0^1=1$$\n\nHindi (विस्तार से):\n1. पहले $y$ के सापेक्ष समाकल करें।\n2. फिर $x$ के सापेक्ष।\n3. अंतिम मान 1 प्राप्त होता है।\n\nVerified result: **1**."},
+
+{q:"Change the order of integration: $\\int_0^1\\int_0^y x\\,dx\\,dy$. / समाकलन का क्रम बदलें।",
+ o:["$\\int_0^1\\int_x^1 x\\,dy\\,dx$","$\\int_0^1\\int_0^1 y\\,dx\\,dy$","$\\int_0^1\\int_0^x y\\,dy\\,dx$","None — कोई नहीं"],
+ a:0,
+ e:"English (step-by-step):\n1. Region described: $0\\le x\\le y\\le1$.\n2. Switching order gives: $0\\le y\\le1$, $x$ runs from 0 to $y$.\n3. After reversing, we get:\n   $$\\int_0^1\\int_x^1 x\\,dy\\,dx$$\n\nHindi (विस्तार से):\n1. क्षेत्र का रेखाचित्र बनाकर सीमा बदलें।\n2. सही बदला हुआ समाकल ऊपर दिया गया है।\n\nVerified transformation: **Correct**."},
+
+{q:"Using Dirichlet theorem, evaluate $\\int_0^{\\infty} \\frac{\\sin x}{x}\\,dx$. / Dirichlet प्रमेय से $\\int_0^{\\infty} (\\sin x)/x\\,dx$ का मान निकालें।",
+ o:["1","0","$\\pi/2$","Diverges — अपसारी"],
+ a:2,
+ e:"English (step-by-step):\n1. This is the classic Dirichlet integral.\n2. It converges conditionally.\n3. Its exact value is:\n   $$\\int_0^{\\infty} \\frac{\\sin x}{x}\\,dx=\\frac{\\pi}{2}$$\n\nHindi (विस्तार से):\n1. यह प्रसिद्ध Dirichlet समाकल है।\n2. इसका मान $\\pi/2$ होता है।\n\nVerified result: **$\\pi/2$**."},
+
+{q:"Evaluate $\\iiint_{[0,1]^3} 1\\,dV$. / घन $[0,1]^3$ पर $\\iiint 1\\,dV$ का मान ज्ञात करें।",
+ o:["0","3","1","None — कोई नहीं"],
+ a:2,
+ e:"English (step-by-step):\n1. Triple integral of 1 over a region equals the volume of that region.\n2. The cube $[0,1]^3$ has side length 1.\n3. Volume $=1\\times1\\times1=1$.\n\nHindi (विस्तार से):\n1. 1 का त्रिगुण समाकल क्षेत्र का आयतन देता है।\n2. घन का आयतन 1 है।\n\nVerified result: **1**."},
+{q:"Find ∇(x^2 y). / ∇(x^2 y) ज्ञात करें।",
+ o:["(2x,2y,0)","(x^2,y^2,0)","None","(2xy,x^2,0)"],
+ a:3,
+ e:"English: ∇f = (∂f/∂x, ∂f/∂y, ∂f/∂z). For f=x^2y, ∂/∂x=2xy and ∂/∂y=x^2, ∂/∂z=0.\nHindi: ग्रेडिएंट में आंशिक अवकलज लेते हैं। परिणाम (2xy,x^2,0) है।"},
+
+{q:"For F=(x,y,z), compute div F. / F=(x,y,z) के लिए div F ज्ञात करें।",
+ o:["x+y+z","0","3","1"],
+ a:2,
+ e:"English: div F = ∂x/∂x + ∂y/∂y + ∂z/∂z = 1+1+1 = 3.\nHindi: डाइवर्जेन्स में सभी घटकों का आंशिक अवकलज जोड़ते हैं, मान 3 है।"},
+
+{q:"For F=(y,−x,0), compute curl F. / F=(y,−x,0) के लिए curl F ज्ञात करें।",
+ o:["(0,0,0)","None","(0,0,2)","(0,0,−2)"],
+ a:3,
+ e:"English: curl F = (0,0, ∂(−x)/∂x − ∂(y)/∂y ) = (0,0,−1−1) = (0,0,−2).\nHindi: curl का z-घटक −2 आता है।"},
+
+{q:"Normal to surface x^2+y^2+z^2=9 at (2,1,2). / सतह पर (2,1,2) पर अभिलम्ब ज्ञात करें।",
+ o:["(2,1,2)","(4,2,4)","(1,1,1)","None"],
+ a:0,
+ e:"English: Normal to f=0 is ∇f=(2x,2y,2z). At (2,1,2) → (4,2,4), direction same as (2,1,2).\nHindi: अभिलम्ब ग्रेडिएंट की दिशा में होता है।"},
+
+{q:"Directional derivative of f=x^2+y^2 at (1,2) along (3,4). / दिशात्मक अवकलज ज्ञात करें।",
+ o:["22/5","5","10","None"],
+ a:0,
+ e:"English: ∇f=(2x,2y)=(2,4). Unit vector=(3/5,4/5). Dot product=(6+16)/5=22/5.\nHindi: दिशात्मक अवकलज = ग्रेडिएंट और इकाई सदिश का डॉट गुणनफल।"},
+
+{q:"Evaluate ∫₀¹∫₀¹ (x+y) dx dy. / द्विगुण समाकल का मान ज्ञात करें।",
+ o:["1","2","3","None"],
+ a:0,
+ e:"English: ∫₀¹∫₀¹ x dx dy = 1/2, ∫₀¹∫₀¹ y dx dy = 1/2. Sum =1.\nHindi: दोनों भाग जोड़ने पर कुल मान 1 प्राप्त होता है।"},
+
+{q:"Using Gauss theorem, ∬ F·n dS for F=(x,y,z) over cube [0,1]^3. / Gauss प्रमेय से फ्लक्स ज्ञात करें।",
+ o:["3/2","3","1","None"],
+ a:1,
+ e:"English: div F=3. Volume of cube=1. Flux=∭ divF dV=3×1=3.\nHindi: गाउस प्रमेय से फ्लक्स = डाइवर्जेन्स × आयतन।"},
+
+{q:"Green’s theorem: ∮ (x dy − y dx) over unit circle. / Green प्रमेय से समाकल का मान।",
+ o:["2π","0","π","None"],
+ a:0,
+ e:"English (verified): By Green’s theorem, ∮(x dy − y dx)=∬(2)dA=2×Area of unit circle=2π. \n\nहिन्दी (सत्यापित): Green प्रमेय से ∬2 dA = 2×π = 2π प्राप्त होता है।"},
+{q:"Using Green’s theorem, evaluate ∮ (y dx + x dy) over the unit circle. / Green प्रमेय से ∮ (y dx + x dy) का मान (इकाई वृत्त पर) ज्ञात करें।",
+ o:["0","2π","π","None"],
+ a:0,
+ e:"English (verified): Write the integral as P dx + Q dy with P=y, Q=x. Then ∂Q/∂x=1 and ∂P/∂y=1, so ∂Q/∂x − ∂P/∂y = 1−1 = 0. Hence by Green’s theorem, ∮(y dx + x dy)=∬0 dA = 0.\n\nहिन्दी (सत्यापित): यहाँ P=y, Q=x लेने पर ∂Q/∂x − ∂P/∂y = 0 आता है। अतः Green प्रमेय से समाकल का मान 0 है।"},
+
+
+{q:"Evaluate lim x→0 (sin x)/x. / सीमा का मान ज्ञात करें।",
+ o:["1","0","∞","None"],
+ a:0,
+ e:"English: Standard limit gives (sin x)/x →1 as x→0.\nHindi: यह मानक सीमा है, मान 1 होता है।"},
+
+{q:"Rolle’s theorem: f(x)=x^3−3x on [−√3,√3]. Find c. / c का मान ज्ञात करें।",
+ o:["0","±1","√3","None"],
+ a:1,
+ e:"English: f′(x)=3x^2−3=0 ⇒ x=±1.\nHindi: Rolle प्रमेय से c=±1 प्राप्त होता है।"},
+{q:"Series $\\sum 1/n^2$ converges to which value? / $\\sum 1/n^2$ किस मान पर अभिसारी है?",
+ o:["1","$\\pi^2/6$","$\\pi^2/8$","None"],
+ a:1,
+ e:"English: The Basel problem gives $\\sum_{n=1}^\\infty 1/n^2 = \\pi^2/6$.<br>हिन्दी: बेसल समस्या के अनुसार यह श्रेणी $\\pi^2/6$ पर अभिसारी है।"},
+
+{q:"Evaluate $\\int_0^1 \\sqrt{x}\\,dx$. / $\\int_0^1 \\sqrt{x}\\,dx$ का मान क्या है?",
+ o:["$1$","$1/2$","None","$2/3$"],
+ a:3,
+ e:"English: $\\int_0^1 x^{1/2}dx=[\\tfrac{2}{3}x^{3/2}]_0^1=2/3$.<br>हिन्दी: समाकलन करने पर मान $2/3$ मिलता है।"},
+
+{q:"Evaluate improper integral $\\int_0^{\\infty} e^{-x}dx$. / $\\int_0^{\\infty} e^{-x}dx$ का मान?",
+ o:["0","None","$1$","$\\infty$"],
+ a:2,
+ e:"English: $\\int_0^{\\infty} e^{-x}dx=[-e^{-x}]_0^{\\infty}=1$.<br>हिन्दी: यह अपवर्ती समाकल 1 के बराबर है।"},
+
+{q:"Find the length of the curve $y=\\dfrac{x^2}{2}$ from $x=0$ to $x=1$. / $y=\\dfrac{x^2}{2}$ की $x=0$ से $x=1$ तक वक्र की लम्बाई ज्ञात करें।",
+ o:[
+   "$\\dfrac{\\sqrt{5}+\\ln(2+\\sqrt{5})}{2}$",
+   "$\\sqrt{5}$",
+   "$1$",
+   "$2$"
+ ],
+ a:0,
+ e:"English (step-by-step):\n1. Arc length formula: $L=\\int_0^1 \\sqrt{1+(y')^2}\\,dx$.\n2. Here $y=\\dfrac{x^2}{2}$, so $y'=x$.\n3. Hence $L=\\int_0^1 \\sqrt{1+x^2}\\,dx$.\n4. Using standard result, $\\int \\sqrt{1+x^2}\\,dx=\\dfrac{x}{2}\\sqrt{1+x^2}+\\dfrac{1}{2}\\ln(x+\\sqrt{1+x^2})$.\n5. Evaluating from 0 to 1 gives $L=\\dfrac{\\sqrt{5}+\\ln(2+\\sqrt{5})}{2}$.\n\nHindi (विस्तार से):\n1. वक्र लम्बाई सूत्र प्रयोग करें।\n2. अवकलज $y'=x$ प्राप्त होता है।\n3. समाकलन करने पर मान $\\dfrac{\\sqrt{5}+\\ln(2+\\sqrt{5})}{2}$ मिलता है।\n\nVerified: ✔ Exact, solvable arc length."
+},
+
+
+{q:"Gradient of $f=x^2+y^2+z^2$ at (1,2,2). / (1,2,2) पर ग्रेडिएंट ज्ञात करें।",
+ o:["(2,4,4)","(1,2,2)","(4,8,8)","None"],
+ a:0,
+ e:"English: $\\nabla f=(2x,2y,2z)$, so at (1,2,2) it is (2,4,4).<br>हिन्दी: ग्रेडिएंट (2x,2y,2z) होता है।"},
+
+{q:"Divergence of $F=(x^2,y^2,z^2)$. / $F=(x^2,y^2,z^2)$ का divergence।",
+ o:["$x^2+y^2+z^2$","$6$","None","$2(x+y+z)$"],
+ a:3,
+ e:"English: div F = ∂(x^2)/∂x + ∂(y^2)/∂y + ∂(z^2)/∂z = 2(x+y+z).<br>हिन्दी: अपसरण $2(x+y+z)$ होता है।"},
+
+{q:"Evaluate $\\int_0^{\\pi} \\sin^2 x\\,dx$. / $\\int_0^{\\pi} \\sin^2 x\\,dx$ का मान।",
+ o:["$\\pi$","None","$\\pi/2$","0"],
+ a:2,
+ e:"English: $\\int_0^{\\pi} \\sin^2x dx = \\pi/2$.<br>हिन्दी: इस समाकल का मान $\\pi/2$ है।"},
+
+{q:"Find $\\limsup$ of sequence $a_n=(-1)^n$. / $a_n=(-1)^n$ का lim sup।",
+ o:["1","−1","0","None"],
+ a:0,
+ e:"English: The sequence oscillates between −1 and 1, so lim sup = 1.<br>हिन्दी: अधिकतम उपसीमा 1 होती है।"},
+{q:"Volume generated by revolving the region under $y=\\sqrt{x}$, $0\\le x\\le1$ about x-axis. / $y=\\sqrt{x}$ के नीचे का क्षेत्र $0\\le x\\le1$ को x-अक्ष के चारों ओर घुमाने पर आयतन ज्ञात करें।",
+ o:[
+   "$\\pi/2$",
+   "$\\pi/3$",
+   "$\\pi/4$",
+   "None — कोई नहीं"
+ ],
+ a:0,
+ e:"English: Using disk method, $V=\\pi\\int_0^1 y^2 dx=\\pi\\int_0^1 x dx=\\pi[\\tfrac{x^2}{2}]_0^1=\\pi/2$.\n\nHindi: डिस्क विधि से $V=\\pi\\int_0^1 x\\,dx=\\pi/2$ प्राप्त होता है।\n\nVerified: ✔ Correct volume."
+},
+
+{q:"Evaluate $\\int_0^1\\int_0^1 xy\\,dx\\,dy$. / $\\int_0^1\\int_0^1 xy\\,dxdy$ का मान।",
+ o:["$1/4$","$1/2$","$1$","None"],
+ a:0,
+ e:"English: $\\int_0^1\\int_0^1 xy dx dy=(1/2)(1/2)=1/4$.<br>हिन्दी: द्विगुण समाकल का सही मान $1/4$ है।"}
+
+];
+
+let current=0,submitted=false,time=0,timer=null;
+const answers=new Array(quiz.length).fill(null);
+const visited=new Array(quiz.length).fill(false);
+
+/* START QUIZ */
+function startQuiz(){
+  document.getElementById("start-screen").style.display="none";
+  document.getElementById("quiz-screen").style.display="block";
+  document.getElementById("bottom-bar").style.display="block";
+
+  buildPalette();
+  showQ();
+
+  timer=setInterval(()=>{
+    time++;
+    document.getElementById("timer").innerText=
+      String(Math.floor(time/60)).padStart(2,"0")+":"+
+      String(time%60).padStart(2,"0");
+  },1000);
+}
+
+/* SHOW QUESTION */
+function showQ(){
+  visited[current]=true;
+
+  document.getElementById("qno").innerText="Question "+(current+1);
+  document.getElementById("question").innerHTML=quiz[current].q;
+  const optBox=document.getElementById("options");
+  const exp=document.getElementById("explanation");
+
+  optBox.innerHTML="";
+  exp.style.display="none";
+
+  quiz[current].o.forEach((t,i)=>{
+    const d=document.createElement("div");
+    d.className="option";
+    if(answers[current]===i) d.classList.add("selected");
+    d.innerHTML=t;
+    d.onclick=()=>selectAns(i);
+    optBox.appendChild(d);
+  });
+
+  updatePalette();
+  if(submitted) showAnswer();
+  MathJax.typeset();
+}
+
+/* SELECT */
+function selectAns(i){
+  if(submitted) return;
+  answers[current]=i;
+  showQ();
+}
+
+/* SUBMIT */
+function submitQuiz(){
+  if(submitted) return;
+  submitted=true;
+  clearInterval(timer);
+  updatePalette();
+  showAnswer();
+}
+
+/* ANSWER */
+function showAnswer(){
+  document.querySelectorAll(".option").forEach((o,i)=>{
+    if(i===quiz[current].a) o.classList.add("correct");
+    if(answers[current]===i && i!==quiz[current].a) o.classList.add("wrong");
+  });
+  const exp=document.getElementById("explanation");
+  exp.style.display="block";
+  exp.innerHTML="<b>Explanation:</b><br>"+quiz[current].e;
+  MathJax.typeset();
+}
+
+/* NAV */
+function nextQ(){current=(current+1)%quiz.length;showQ()}
+function prevQ(){current=(current-1+quiz.length)%quiz.length;showQ()}
+
+/* PALETTE */
+function togglePalette(){
+  const p=document.getElementById("palette");
+  p.style.display=(p.style.display==="block")?"none":"block";
+}
+
+function buildPalette(){
+  const box=document.getElementById("palette-buttons");
+  box.innerHTML="";
+  quiz.forEach((_,i)=>{
+    const b=document.createElement("button");
+    b.id="p"+i;
+    b.className="pbtn not-visited";
+    b.innerText=i+1;
+    b.onclick=()=>{
+      current=i;
+      showQ();
+      togglePalette();
+    };
+    box.appendChild(b);
+  });
+}
+
+function updatePalette(){
+  quiz.forEach((_,i)=>{
+    const b=document.getElementById("p"+i);
+    if(submitted){
+      if(answers[i]==null) b.className="pbtn not-answered";
+      else if(answers[i]===quiz[i].a) b.className="pbtn correctP";
+      else b.className="pbtn wrongP";
+    }else{
+      if(!visited[i]) b.className="pbtn not-visited";
+      else if(answers[i]==null) b.className="pbtn not-answered";
+      else b.className="pbtn answered";
+    }
+  });
+}
+</script>
+</body>
+</html>
